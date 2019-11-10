@@ -93,6 +93,7 @@ def load_and_preprocess(file_path, orientation, remap_config, reduce_slices=Fals
 
 
 def load_data(file_path, orientation):
+    nb.Nifti1Header.quaternion_threshold = -1e-06
     volume_nifty, labelmap_nifty = nb.load(file_path[0]), nb.load(file_path[1])
     volume, labelmap = volume_nifty.get_fdata(), labelmap_nifty.get_fdata()
     volume = (volume - np.min(volume)) / (np.max(volume) - np.min(volume))
@@ -159,7 +160,7 @@ def load_file_paths(data_dir, label_dir, volumes_txt_file=None):
         volumes_to_use = [name for name in os.listdir(data_dir)]
 
     file_paths = [
-        [os.path.join(data_dir, vol, 'mri/orig.mgz'), os.path.join(label_dir, vol+'_glm.mgz')]
+        [os.path.join(data_dir, vol + ".nii.gz"), os.path.join(label_dir, vol+'.nii.gz')]
         for
         vol in volumes_to_use]
     return file_paths
